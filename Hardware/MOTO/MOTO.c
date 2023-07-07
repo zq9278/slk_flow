@@ -39,6 +39,7 @@ void Rotate_StepperMotor_Clockwise( )
     float preset_value = 10.0;
     float weight=0.0;
 
+
     // 当压力传感器的值小于预设值时，继续旋转
     while ( (( weight = HX711_GetForce()) < preset_value)| (HAL_GPIO_ReadPin(BUTTON2_GPIO_PORT, BUTTON1_PIN) == GPIO_PIN_SET))
     {
