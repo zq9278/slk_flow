@@ -3,30 +3,27 @@
 
 #include "stm32f4xx_hal.h"
 
-// L6219�������Ŷ���
-#define IN1_Pin GPIO_PIN_6
-#define IN1_GPIO_Port GPIOC
-#define IN2_Pin GPIO_PIN_7
-#define IN2_GPIO_Port GPIOC
-#define IN3_Pin GPIO_PIN_8
-#define IN3_GPIO_Port GPIOC
-#define IN4_Pin GPIO_PIN_9
-#define IN4_GPIO_Port GPIOC
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
 
-// �������Ŷ���
-#define KEY1_Pin GPIO_PIN_11
-#define KEY1_GPIO_Port GPIOA
-#define KEY2_Pin GPIO_PIN_12
-#define KEY2_GPIO_Port GPIOA
 
-// ��ʼ��L6219�������
+/* Motor GPIO Pins -----------------------------------------------------------*/
+#define MOTOR_PIN_A GPIO_PIN_9
+#define MOTOR_PIN_B GPIO_PIN_13
+#define MOTOR_PIN_C GPIO_PIN_14
+#define MOTOR_PIN_D GPIO_PIN_12
+#define MOTOR_GPIO_PORT GPIOD
+
+/* Button GPIO Pins ----------------------------------------------------------*/
+#define BUTTON1_PIN GPIO_PIN_12
+
+#define BUTTON1_GPIO_PORT GPIOB
+#define BUTTON2_PIN GPIO_PIN_11
+#define BUTTON2_GPIO_PORT GPIOB
+
+/* Function prototypes -------------------------------------------------------*/
 void L6219_Init(void);
-
-// ��ʱ����ת�������
-void L6219_CCW_Step(void);
-
-
-// ˳ʱ����ת�������
-void L6219_CW_Step(void);
+void Rotate_StepperMotor_Clockwise( );
+void Rotate_StepperMotor_CounterClockwise( );
 
 #endif // __L6219_MOTOR_H__

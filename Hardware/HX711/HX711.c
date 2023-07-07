@@ -77,7 +77,7 @@ float HX711_GetForce(void)
   //  float force = (float)rawData;
 	  //float force = (float)rawData / HX711_SCALE_FACTOR;
 	//float force = ((0-(float)rawData) / HX711_SCALE_FACTOR)/10+2.538;
-	float force = ((0-(float)rawData) / HX711_SCALE_FACTOR)/10+3.17;
+	float force = ((float)rawData / HX711_SCALE_FACTOR)/10+3.60;
     return force;
 }
 //float get_maopi(int32_t maopi)

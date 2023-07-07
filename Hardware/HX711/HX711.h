@@ -11,7 +11,7 @@
 
 /* 数据缩放因子，根据负载传感器的参数和电压参考调整
  * 变大范围变小*/
-#define HX711_SCALE_FACTOR     5325.0f
+#define HX711_SCALE_FACTOR     8325.0f
 //#define HX711_SCALE_FACTOR     10000.0f
 
 /* 初始化HX711 */
