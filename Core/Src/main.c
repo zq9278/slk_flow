@@ -118,28 +118,45 @@ file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "Hardware/*.*")
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      float force = HX711_GetForce();
-//      LCD1602_SetCursorPosition(0, 0);
-//      LCD1602_PrintString("Value:");
-//      LCD1602_SetCursorPosition(1, 0);
-//      LCD1602_PrintFloat(force, 2);
-     // LCD1602_PrintInt(42);
-     // LCD1602_PrintString("Hello, world!");
+//      float force = HX711_GetForce();
+////      LCD1602_SetCursorPosition(0, 0);
+////      LCD1602_PrintString("Value:");
+////      LCD1602_SetCursorPosition(1, 0);
+////      LCD1602_PrintFloat(force, 2);
+//     // LCD1602_PrintInt(42);
+//     // LCD1602_PrintString("Hello, world!");
+//
+//      //const uint8_t *force2 = (const uint8_t *) (int) (force);
+//      //HAL_UART_Transmit(&huart1,force2,sizeof(*force2),100);
+//      /* ????1?? */
+//      delay_us(1);      // ¼ì²â°´¼ü1×´Ì¬
+//      if (HAL_GPIO_ReadPin(BUTTON1_GPIO_PORT, BUTTON1_PIN) == GPIO_PIN_RESET)
+//      {
+//          Rotate_StepperMotor_CounterClockwise( );
+//
+//      }
+//
+//      // ¼ì²â°´¼ü2×´Ì¬
+//      if (HAL_GPIO_ReadPin(BUTTON2_GPIO_PORT, BUTTON2_PIN) == GPIO_PIN_RESET) {
+//          Rotate_StepperMotor_Clockwise();
+//      }
 
-      //const uint8_t *force2 = (const uint8_t *) (int) (force);
-      //HAL_UART_Transmit(&huart1,force2,sizeof(*force2),100);
-      /* ????1?? */
-      delay_us(1);      // ¼ì²â°´¼ü1×´Ì¬
-      if (HAL_GPIO_ReadPin(BUTTON1_GPIO_PORT, BUTTON1_PIN) == GPIO_PIN_RESET)
+
+      if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY1_Pin) == GPIO_PIN_RESET)
       {
-          Rotate_StepperMotor_CounterClockwise( );
-
+          Step_CounterClockwise();
+      }
+          // ¶ÁÈ¡°´¼ü2×´Ì¬
+      else if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY2_Pin) == GPIO_PIN_RESET)
+      {
+          Step_Clockwise();
+      }
+      else
+      {
+          L6219_Stop();
       }
 
-      // ¼ì²â°´¼ü2×´Ì¬
-      if (HAL_GPIO_ReadPin(BUTTON2_GPIO_PORT, BUTTON2_PIN) == GPIO_PIN_RESET) {
-          Rotate_StepperMotor_Clockwise();
-      }
+
   }
   /* USER CODE END 3 */
 }
