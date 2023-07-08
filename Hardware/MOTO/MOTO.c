@@ -30,93 +30,196 @@ void L6219_Init(void)
 
 // 逆时针旋转步进电机
 // 顺时针旋转
-void Step_CounterClockwise(void )
+//void Step_CounterClockwise(void )
+//{
+//    static uint8_t step = 0;
+//    step = (step + 1) % 8;
+//
+//    switch (step)
+//    {
+//        case 0:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 1:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 2:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 3:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin|IN3_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 4:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 5:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN3_Pin|IN4_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 6:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN4_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 7:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN4_Pin|IN1_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
+//            break;
+//    }
+//
+//    delay_us(20);
+//}
+//
+//// 逆时针旋转
+//void Step_Clockwise( void)
+//{
+//    static uint8_t step = 0;
+//    step = (step + 1) % 8;
+//
+//    switch (step)
+//    {
+//        case 0:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 1:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN4_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 2:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN4_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 3:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN4_Pin|IN3_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 4:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 5:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN3_Pin|IN2_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 6:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 7:
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN2_Pin|IN1_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//    }
+//
+//    delay_us(20);
+//}
+
+
+
+
+void Step_CounterClockwise(void)
 {
     static uint8_t step = 0;
     step = (step + 1) % 8;
-
+    HAL_GPIO_WritePin(GPIO_PORT, IN1_Pin | IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
     switch (step)
     {
-        case 0:
+        case 0: // A+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
             break;
-        case 1:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+        case 1: // A+ B+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin | PHASEB_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN3_Pin, GPIO_PIN_SET);
             break;
-        case 2:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 3:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin|IN3_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 4:
+        case 2: // B+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_SET);
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN4_Pin, GPIO_PIN_RESET);
             break;
-        case 5:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin|IN4_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin, GPIO_PIN_RESET);
+        case 3: // B+ A-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin | IN3_Pin, GPIO_PIN_SET);
             break;
-        case 6:
+        case 4: // A-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin, GPIO_PIN_SET);
+            break;
+        case 5: // A- B-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin | PHASEB_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin | IN4_Pin, GPIO_PIN_SET);
+            break;
+        case 6: // B-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN4_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
             break;
-        case 7:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN4_Pin|IN1_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
+        case 7: // B- A+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN4_Pin, GPIO_PIN_SET);
             break;
     }
 
-    delay_us(20);
+    HAL_Delay(2); // 延时2毫秒
 }
 
-// 逆时针旋转
-void Step_Clockwise( void)
+void Step_Clockwise(void)
 {
     static uint8_t step = 0;
     step = (step + 1) % 8;
-
+    HAL_GPIO_WritePin(GPIO_PORT, IN1_Pin | IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
     switch (step)
     {
-        case 0:
+        case 0: // A+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
             break;
-        case 1:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN4_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
+        case 1: // B- A+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN4_Pin, GPIO_PIN_SET);
             break;
-        case 2:
+        case 2: // B-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN4_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN3_Pin, GPIO_PIN_RESET);
             break;
-        case 3:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN4_Pin|IN3_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin, GPIO_PIN_RESET);
+        case 3: // A- B-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin | PHASEB_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin | IN4_Pin, GPIO_PIN_SET);
             break;
-        case 4:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN2_Pin|IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 5:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin|IN2_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 6:
+        case 4: // A-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_RESET);
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
             break;
-        case 7:
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin|IN1_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
+        case 5: // B+ A-
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN2_Pin | IN3_Pin, GPIO_PIN_SET);
+            break;
+        case 6: // B+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin,GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEB_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
+            break;
+        case 7: // A+ B+
+            HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin | PHASEB_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN3_Pin, GPIO_PIN_SET);
             break;
     }
 
-    delay_us(20);
+    HAL_Delay(2); // 延时2毫秒
 }
 
 
@@ -124,7 +227,7 @@ void Step_Clockwise( void)
 // 停止步进电机旋转
 void L6219_Stop(void)
 {
-    HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin |IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin |IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
 }
 
 

@@ -13,8 +13,8 @@
 #define IN2_Pin GPIO_PIN_13
 #define IN3_Pin GPIO_PIN_14
 #define IN4_Pin GPIO_PIN_12
-#define PHA GPIO_PIN_6
-#define PHB GPIO_PIN_15
+#define PHASEA_Pin GPIO_PIN_6
+#define PHASEB_Pin GPIO_PIN_15
 #define L6219_GPIO_Port GPIOD
 
 // 定义按键引脚
