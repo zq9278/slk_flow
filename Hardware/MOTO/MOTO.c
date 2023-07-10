@@ -126,7 +126,8 @@ void Step_CounterClockwise(void)
 {
     static uint8_t step = 0;
     step = (step + 1) % 8;
-    HAL_GPIO_WritePin(GPIO_PORT, IN1_Pin | IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
+    //HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin|PHASEB_Pin, GPIO_PIN_RESET);
     switch (step)
     {
         case 0: // A+
@@ -168,15 +169,18 @@ void Step_CounterClockwise(void)
             HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN4_Pin, GPIO_PIN_SET);
             break;
     }
+    delay_us(20);
 
-    HAL_Delay(2); // 延时2毫秒
+  //  HAL_Delay(2); // 延时2毫秒
 }
 
 void Step_Clockwise(void)
 {
     static uint8_t step = 0;
     step = (step + 1) % 8;
-    HAL_GPIO_WritePin(GPIO_PORT, IN1_Pin | IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
+    //HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin | IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(L6219_GPIO_Port, PHASEA_Pin|PHASEB_Pin, GPIO_PIN_RESET);
+
     switch (step)
     {
         case 0: // A+
@@ -219,7 +223,8 @@ void Step_Clockwise(void)
             break;
     }
 
-    HAL_Delay(2); // 延时2毫秒
+    //HAL_Delay(2); // 延时2毫秒
+    delay_us(20);
 }
 
 
@@ -227,7 +232,7 @@ void Step_Clockwise(void)
 // 停止步进电机旋转
 void L6219_Stop(void)
 {
-    HAL_GPIO_WritePin(L6219_L6219_GPIO_Port, IN1_Pin |IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(L6219_GPIO_Port, IN1_Pin |IN2_Pin | IN3_Pin | IN4_Pin, GPIO_PIN_RESET);
 }
 
 
