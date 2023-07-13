@@ -24,7 +24,7 @@
 #include <string.h>
 #include "../../Hardware/HX711/HX711.h"
 #include "../../Hardware/LCD1602//LCD1602.h"
-#include "MOTO.h"
+#include "../../Hardware/MOTO/MOTO.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -142,7 +142,7 @@ file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "Hardware/*.*")
 //      }
 
 
-      if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY1_Pin) == GPIO_PIN_RESET)
+      if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY1_Pin) == GPIO_PIN_SET)
       {
           Step_CounterClockwise();
       }
@@ -384,11 +384,8 @@ static void MX_GPIO_Init(void)
                           |GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9|GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14
-                          |GPIO_PIN_15|GPIO_PIN_6, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_10|GPIO_PIN_11, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12
+                          |GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15|GPIO_PIN_6, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
