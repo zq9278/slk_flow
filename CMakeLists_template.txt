@@ -48,11 +48,11 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(${includes})
+include_directories(${includes} Hardware/HX711 Hardware/LCD1602 /Hardware/OLED_0.96 /Hardware/U8g2)
 
 add_definitions(${defines})
 
-file(GLOB_RECURSE SOURCES ${sources})
+file(GLOB_RECURSE SOURCES ${sources} "Hardware/*.*")
 
 set(LINKER_SCRIPT $${CMAKE_SOURCE_DIR}/${linkerScript})
 

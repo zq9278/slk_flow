@@ -18,6 +18,7 @@ void HX711_Init(void)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(HX711_CLK_GPIO_Port, &GPIO_InitStruct);
+    //__HAL_RCC_GPIOA_CLK_ENABLE();
 
     /* 时钟引脚置低 */
     HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_RESET);
@@ -28,33 +29,25 @@ int32_t HX711_Read(void)
 {
     int32_t data = 0;
     uint8_t i;
-
     /* 等待数据引脚为低 ,即A/D转换器准备好*/
     while (HAL_GPIO_ReadPin(HX711_DATA_GPIO_Port, HX711_DATA_Pin) == GPIO_PIN_SET)//当数据位是高电平时，一直进入循环，直到数据为变成低电平
     {;}
-
     /* 读取24位数据 */
     for (i = 0; i < 24; i++)
     {
         /* 时钟引脚置高 */
         HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_SET);
        data <<= 1;
-
-        /* 延迟 */
         delay_us(1);
         /* 时钟引脚置低 */
         HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_RESET);
-
         /* 检查数据引脚的值 */
         if (HAL_GPIO_ReadPin(HX711_DATA_GPIO_Port, HX711_DATA_Pin) == GPIO_PIN_SET)
         {
             data++;
         }
-
-        /* 延迟 */
         delay_us(1);
     }
-
     /* 时钟引脚置高 */
     HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_SET);
     delay_us(1);
@@ -68,8 +61,6 @@ int32_t HX711_Read(void)
 			//data=data^ 0x800000;
     return data;
 }
-
-
 /* 获取力（牛顿） */
 float HX711_GetForce(void)
 {
@@ -80,7 +71,3 @@ float HX711_GetForce(void)
 	float force = ((float)rawData / HX711_SCALE_FACTOR)/10+3.60;
     return force;
 }
-//float get_maopi(int32_t maopi)
-//{
-	
-//}
