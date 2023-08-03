@@ -47,6 +47,9 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc3;
+DMA_HandleTypeDef hdma_adc3;
+
 I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
@@ -62,6 +65,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_DMA_Init(void);
+static void MX_ADC3_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -102,13 +107,16 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM4_Init();
   MX_I2C1_Init();
+  MX_DMA_Init();
+  MX_ADC3_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+    HX711_Init();
     u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_i2c, u8g2_gpio_and_delay_stm32);
     u8g2_InitDisplay(&u8g2); // send init sequence to the display, display is in sleep mode after this,
     u8g2_SetPowerSave(&u8g2, 0); // wake up display
     u8g2_SetFont(&u8g2,u8g2_font_ncenB10_tr);
-    char buff[5];
+    char buff[10];
 //    for (float i = 0.0; i < 10; i+=0.01) {
 //        u8g2_ClearBuffer(&u8g2);
 //        u8g2_DrawStr(&u8g2,3,10,"weirht:");
@@ -131,77 +139,15 @@ int main(void)
 
 
      // u8g2_DrawStr(&u8g2,6,10,"test");
+
       u8g2_ClearBuffer(&u8g2);
       float force = HX711_GetForce();
-      sprintf(buff,"%.2f",force);
+      sprintf(buff,"%.5f",force);
       u8g2_DrawStr(&u8g2,3,10,"weirht:");
       u8g2_DrawStr(&u8g2,60,12,buff);
       u8g2_SendBuffer(&u8g2);
 ////      LCD1602_SetCursorPosition(0, 0);
-////      LCD1602_PrintString("Value:");
-////      LCD1602_SetCursorPosition(1, 0);
-////      LCD1602_PrintFloat(force, 2);
-//     // LCD1602_PrintInt(42);
-//     // LCD1602_PrintString("Hello, world!");
 //
-//      const uint8_t *force2 = (const uint8_t *) (int) (force);
-//      //HAL_UART_Transmit(&huart1,force2,sizeof(*force2),100);
-//      /* ????1?? */
-//      delay_us(1);      // 检测按键1状态
-//      if (HAL_GPIO_ReadPin(BUTTON1_GPIO_PORT, BUTTON1_PIN) == GPIO_PIN_RESET)
-//      {
-//          Rotate_StepperMotor_CounterClockwise( );
-//
-//      }
-//
-//      // 检测按键2状态
-//      if (HAL_GPIO_ReadPin(BUTTON2_GPIO_PORT, BUTTON2_PIN) == GPIO_PIN_RESET) {
-//          Rotate_StepperMotor_Clockwise();
-//      }
-
-      // 按键1按下，开始逆时针旋转
-
-
-
-
-//      if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY1_Pin) == GPIO_PIN_SET) {
-//          startStepperMotor(false);
-//
-//          while (HX711_GetForce() < pressure_threshold && HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY1_Pin) == GPIO_PIN_SET) {
-//              // 等待压力到达预设值或按键松开
-//          }
-//
-//          stopStepperMotor();
-//      }
-//
-//      // 按键2按下，开始顺时针旋转
-//      if (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY2_Pin) == GPIO_PIN_SET) {
-//          startStepperMotor(true);
-//
-//          while (HX711_GetForce() < pressure_threshold && HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY2_Pin) == GPIO_PIN_SET) {
-//              // 等待压力到达预设值或按键松开
-//          }
-//
-//          stopStepperMotor();
-//      }
-
-//      if(DirFlag==1)
-//      {
-//          DirFlag=2;										//反转
-//      }
-//      else
-//      {
-//          DirFlag=1;                    //正转
-//      }
-
-
-//sendData(0xA0,DirFlag); 				//PAGE35:RAMPMODE=1速度模式到正VMAX使用AMAX加速度	RAMPMODE=2速度模式到负VMAX使用AMAX加速度
-    //  sendData(0x21,0x00000000);			//PAGE35:	电机旋转
-      //OLED_ShowChar(1, 1, 'A');
-//      sendData(0x2D,0XADFFFF3800);
-//     // sendData(0x21, 0xADFFFF3800);			//PAGE35:	电机旋转
-//      HAL_Delay(5);								//HAL库延时15S
-//      OLED_ShowChar(1, 1, 'A');
 
   }
 
@@ -257,6 +203,64 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC3_Init(void)
+{
+
+  /* USER CODE BEGIN ADC3_Init 0 */
+
+  /* USER CODE END ADC3_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC3_Init 1 */
+
+  /* USER CODE END ADC3_Init 1 */
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc3.Instance = ADC3;
+  hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc3.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc3.Init.ScanConvMode = ENABLE;
+  hadc3.Init.ContinuousConvMode = DISABLE;
+  hadc3.Init.DiscontinuousConvMode = DISABLE;
+  hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc3.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc3.Init.NbrOfConversion = 2;
+  hadc3.Init.DMAContinuousRequests = ENABLE;
+  hadc3.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 2;
+  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC3_Init 2 */
+
+  /* USER CODE END ADC3_Init 2 */
+
 }
 
 /**
@@ -385,6 +389,22 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
 

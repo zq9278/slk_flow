@@ -2,6 +2,9 @@
 #include "main.h"
 
 /* HX711 初始化 */
+unsigned long Weight_Maopi = 0;//毛皮重
+char Weight_Err = 0;//重量异常标志
+
 void HX711_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -19,9 +22,10 @@ void HX711_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(HX711_CLK_GPIO_Port, &GPIO_InitStruct);
     //__HAL_RCC_GPIOA_CLK_ENABLE();
-
+    Get_Maopi();
     /* 时钟引脚置低 */
     HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_RESET);
+
 }
 
 /* 读取HX711数据 */
@@ -51,23 +55,49 @@ int32_t HX711_Read(void)
     /* 时钟引脚置高 */
     HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_SET);
     delay_us(1);
+    data=data^ 0x800000;
     /* 时钟引脚置低 */
     HAL_GPIO_WritePin(HX711_CLK_GPIO_Port, HX711_CLK_Pin, GPIO_PIN_RESET);
-    //delay_us(1);    /* 符号位扩展 */
-    if (data & 0x00800000)
-    {
-        data |= 0xFF000000;
-    }
-			//data=data^ 0x800000;
+    delay_us(1);    /* 符号位扩展 */
     return data;
+}
+unsigned long Get_Maopi(void)
+{
+    unsigned long Weight_Maopi_temp;
+
+    Weight_Maopi_temp = HX711_Read();
+    HAL_Delay(500);
+    Weight_Maopi = HX711_Read();
+
+    if((Weight_Maopi*10)/HX711_SCALE_FACTOR != (Weight_Maopi_temp*10)/HX711_SCALE_FACTOR)
+        return 	 Weight_Maopi;
+    else
+        return 0;
 }
 /* 获取力（牛顿） */
 float HX711_GetForce(void)
 {
+    double Weight_Shiwu;
+    unsigned int wei;
+    Weight_Shiwu = HX711_Read();
+    if(Weight_Shiwu>=Weight_Maopi)
+    {
+        Weight_Shiwu = Weight_Shiwu - Weight_Maopi;		//获取净重
+        Weight_Err = 0;
+    }
+    else
+    {
+        Weight_Shiwu = Weight_Maopi - Weight_Shiwu;
+        Weight_Err = 1;//出现负值了，可能是去皮异常
+    }
+    wei = ((Weight_Shiwu*10)/HX711_SCALE_FACTOR)+0.5f;
+    if(wei==0)Weight_Err = 0;
+    return wei;
+
     int32_t rawData = HX711_Read();
   //  float force = (float)rawData;
 	  //float force = (float)rawData / HX711_SCALE_FACTOR;
 	//float force = ((0-(float)rawData) / HX711_SCALE_FACTOR)/10+2.538;
-	float force = ((float)rawData / HX711_SCALE_FACTOR)/10+3.60;
-    return force;
+	//float force = ((float)rawData )*10/ HX711_SCALE_FACTOR+3.60;
+
 }

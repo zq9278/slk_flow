@@ -11,7 +11,7 @@
 
 /* 数据缩放因子，根据负载传感器的参数和电压参考调整
  * 变大范围变小*/
-#define HX711_SCALE_FACTOR     8325.0f
+#define HX711_SCALE_FACTOR     8290.0f
 //#define HX711_SCALE_FACTOR     10000.0f
 
 /* 初始化HX711 */
@@ -19,6 +19,7 @@ void HX711_Init(void);
 
 /* 读取HX711数据 */
 int32_t HX711_Read(void);
+unsigned long Get_Maopi(void);
 
 /* 获取力（牛顿） */
 float HX711_GetForce(void);
